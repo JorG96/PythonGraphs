@@ -23,4 +23,22 @@ solution(n, roads) = false.
 
 As you can see, it's only possible to travel from city 3 to city 4 by traversing at least 3 roads.
 '''
+from collections import defaultdict
+
+def solution(n, roads):
+    vertices = defaultdict(set)
+    
+    for road in roads:
+        x, y = road
+        vertices[x].add(y)
+        vertices[y].add(x)
+    
+    for i in range(n):
+        for j in range(i + 1, n):
+            if i in vertices[j] or j in vertices[i] or len(vertices[i] & vertices[j]) >= 1:
+                continue
+            else:
+                return False
+    print(vertices)
+    return True
 
