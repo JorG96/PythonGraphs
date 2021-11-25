@@ -7,3 +7,14 @@ The graph representing some contour is cosidered to be a star if it is a tree of
 Here is an example of some stars:
 
 '''
+
+def solution(adj):    
+    return sum(isStar(adj, i) for i in range(len(adj)))
+
+
+def isStar(adj, i):
+    star = sum(adj[i]) != 0 \
+        and not adj[i][i] \
+        and all(sum(row) == 1 for row in adj if row[i])
+    # 0.5 for stars of size 2 as they are counted twice
+    return star * (0.5 if sum(adj[i]) == 1 else 1) 
