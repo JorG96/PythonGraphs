@@ -17,3 +17,25 @@ solution(n, wmap) = false.
 There is a cycle 1 - 4 - 0, which length is 3 - an odd number.
 
 """
+
+from collections import defaultdict
+from collections import deque
+
+def solution(n, wmap):
+    adj_list = defaultdict(set)
+    for s, e in wmap:
+        if s == e:
+            return False
+        adj_list[s].add(e)
+        adj_list[e].add(s)
+        
+    colors = [0 for i in range(n)]
+    
+    for i in range(n):
+        for j in adj_list[i]:
+            if colors[j] == 0:
+                colors[j] = colors[i] + 1
+            elif colors[j] == colors[i]:
+                return False
+    
+    return True
