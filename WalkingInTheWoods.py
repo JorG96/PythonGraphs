@@ -20,3 +20,20 @@ solution(n, wmap) = 2.
 
 Here you need to visit one more meadow that isn't connected to any of the other ones, so you'll need to walk through the thicket one more time.
 """
+def solution(n, wmap):
+    g = [set() for i in range(n)] 
+    for x,y in wmap:
+        g[x].add(y)
+        g[y].add(x)
+    def dfs(node):
+        visited[node] = 1 
+        for v in g[node]:
+            if not visited[v]:
+                dfs(v)
+    count = 0 
+    visited = [0] * n 
+    for i in range(n):
+        if not visited[i]:
+            count += 1 
+            dfs(i)
+    return count - 1
