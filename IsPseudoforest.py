@@ -17,3 +17,24 @@ There are three cycles in one of the connected components:
 1 - 3 - 4 - 0;
 0 - 1 - 2 - 3 - 4.
 """
+from collections import defaultdict
+
+def solution(n, wmap):
+    adj = defaultdict(list)
+    for i,j in wmap:
+        adj[i].append(j)
+        adj[j].append(i)
+
+    def explore(node):
+        if node not in adj:
+            return 1
+        count = -1
+        for dest in adj.pop(node, []):
+            count += explore(dest)
+        return count
+    
+    while adj:
+        if explore(next(iter(adj))) > 1:
+            return False
+    return True
+        
