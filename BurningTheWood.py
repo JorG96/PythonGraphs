@@ -19,3 +19,22 @@ solution(n, wmap, start, k) = [0, 1, 2, 4, 5, 6].
 
 At the beginning of the first hour meadow 0 starts burning. At the second hour meadows 1 and 6 start burning as well. At the third hour neighbors of meadow 1 - meadows 2 and 4 - catch on fire, and so does the only neighbor of meadow 6 - meadow 5. So, at the end of the third hour meadows 0, 1, 2, 4, 5 and 6 will be on fire.
 """
+def solution(n, wmap, start, k):
+    G = {i: set() for i in range(n)}
+    for a,b in wmap:
+        G[a].add(b)
+        G[b].add(a)
+    
+    hour = 0
+    on_fire = {start}
+    frontier = [start]
+    while hour < k:
+        hour += 1
+        newf = []
+        for f in frontier:
+            for n in G[f]:
+                if n not in on_fire:
+                    newf.append(n)
+                    on_fire.add(n)
+        frontier = newf
+    return list(sorted(on_fire))
