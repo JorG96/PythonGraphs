@@ -22,3 +22,30 @@ triples = [[4, 6, 3],
 the output should be
 solution(tree, triples) = [true, true, false].
 """
+def solution(tree, triples):
+    size = len(tree)//2+2
+    parentPointer = [0]*size
+    for i in range(1,len(tree),2):
+        parentPointer[tree[i]] = tree[i-1]
+    parentSet = [set() for i in parentPointer]
+    for i in range(1,size):
+        parent = i
+        while parent != 0:
+            parentSet[i].add(parent)
+            parent = parentPointer[parent]
+    result = []
+    for nodes in triples:
+        a, b, c = nodes[0], nodes[1], nodes[2]
+        answer = False
+        parentA = a
+        while parentA not in parentSet[b] and parentA != 0:
+            parentA = parentPointer[parentA]
+            if parentA == c:
+                answer = True
+        parentB = b
+        while parentB not in parentSet[a] and parentB != 0:
+            parentB = parentPointer[parentB]
+            if parentB == c:
+                answer = True
+        result.append(answer)
+    return result
