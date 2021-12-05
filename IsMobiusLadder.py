@@ -36,3 +36,45 @@ ladder = [[0, 1], [0, 3], [0, 7], [0, 9], [1, 2],
           [5, 8], [6, 7], [6, 9], [7, 8], [8, 9]]
 the output should be solution(n, ladder) = false.
 """
+from collections import deque
+
+
+def bfs(graph, source, target):
+    """ Returns distance from source to target.
+    """
+    dist = {source: 0}
+    queue = deque([source])
+    while queue:
+        u = queue.popleft()
+        for v in graph[u]:
+            if v not in dist:
+                dist[v] = dist[u] + 1
+                if v == target:
+                    return dist[v]
+                if dist[v] > 2:
+                    return -1
+                queue.append(v)
+
+
+def are_dist_ok(graph, n):
+    """ Checks that distance among all the neighbors of every vertex is 2.
+    """
+    for i in range(n):
+        if len([True for j in graph[i] if i != j]) != 3 or \
+                [bfs(graph, graph[i][x], graph[i][y])
+                 for x in range(2) for y in range(x + 1, 3)] != [2, 2, 2]:
+            return False
+    return True
+
+
+def solution(n, ladder):
+    """ Returns True if graph is Mobius ladder, False otherwise.
+    """
+    graph = [[] for _ in range(n)]  # adjacency list
+    for u, v in ladder:
+        graph[u].append(v)
+        graph[v].append(u)
+
+    if n == 4:  # check if it's a complete graph
+        return all([len([True for j in graph[i] if j != i]) == 3 for i in range(n)])
+    return are_dist_ok(graph, n)
