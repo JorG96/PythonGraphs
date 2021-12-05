@@ -14,3 +14,39 @@ the output should be solution(n, tree) = 7.
 
 The longest path is the path from vertex 4 to one vertex 9 or 0.
 """
+def solution(n, tree):
+    V = buildV(n, tree)
+    if n == 2:
+        return 1
+    if n == 3:
+        return 2
+    source, dist = getFarthest(0, n, V)
+    target, dist = getFarthest(source, n, V)
+    return dist - 2
+
+def getFarthest(v, n, V):
+    dist = 1
+    visited = [False] * n
+    queue = [v]
+    farthest = -1
+    
+    while(queue != []):
+        newQueue = []
+        for u in queue:
+            farthest = u
+            for w in V[u]:
+                if not visited[w]:
+                    newQueue += [w]
+                    visited[w] = True
+        dist += 1
+        queue = newQueue
+        
+    return (farthest, dist)
+
+
+def buildV(n, E):
+    V = [ [ ] for _ in range(n)]
+    for e in E:
+        V[e[0]] += [e[1]]
+        V[e[1]] += [e[0]]
+    return V
