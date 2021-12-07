@@ -16,3 +16,41 @@ grid = [[0, 1, 4, 2, 3],
 start = [0, 0], and finish = [3, 4], the output should be
 solution(grid, start, finish) = 4.
 """
+from collections import defaultdict
+
+def solution(grid, start, finish):
+    jumps = defaultdict(set)
+    for i, row in enumerate(grid):
+        for j, val in enumerate(row):
+            jumps[val].add((i,j))
+
+    h, w = len(grid), len(grid[0])
+
+    def visit(i, j):
+        if grid[i][j] == -1:
+            return
+
+        yield from jumps.pop(grid[i][j], [])
+        grid[i][j] = -1
+
+        if i > 0:
+            yield i-1, j
+        if i < h-1:
+            yield i+1, j
+        if j > 0:
+            yield i, j-1
+        if j < w-1:
+            yield i, j+1
+
+    finish = tuple(finish)
+    q = [tuple(start)]
+    t = 0
+
+    while True:
+        nxt = []
+        for pos in q:
+            if pos == finish:
+                return t
+            nxt += list(visit(*pos))
+        q = nxt
+        t += 1
