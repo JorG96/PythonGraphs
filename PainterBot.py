@@ -23,3 +23,27 @@ solution(canvas, operations, d) = [[10, 10,  3,  2,  4, 10, 6 ],
                                      [10, 10, 10,  3,  3, 10, 10],
                                      [10, 10, 10, 10, 10, 10, 10]]
 """
+def solution(canvas, operations, d):
+    h, w = len(canvas), len(canvas[0])
+    
+    def fill(node, init, color):
+        matches = set()
+        q = [node]
+        while q:
+            i, j = q.pop()
+            if not (0 <= i < h and 0 <= j < w):
+                continue
+            elif (i,j) in matches:
+                continue
+            if abs(canvas[i][j] - init) <= d:
+                matches.add((i, j))
+                q.append((i+1, j))
+                q.append((i-1, j))
+                q.append((i, j+1))
+                q.append((i, j-1))
+        for i,j in matches:
+            canvas[i][j] = color
+    
+    for i, j, color in operations:
+        fill((i, j), canvas[i][j], color)
+    return canvas
