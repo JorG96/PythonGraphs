@@ -12,3 +12,37 @@ solution(n, m) = 3.
 
 Ratiorg can define three pairs: (1, 1), (1, 2) and (2, 2)
 """
+import numpy as np
+
+def solution(n, m):
+    if m < n:
+        n, m = m, n
+
+    finish = (n-1, m-1)
+
+    def steps(i, j, a, b):
+        options = [(i+a, j+b), (i+a, j-b),
+                   (i-a, j+b), (i-a, j-b),
+                   (i+b, j+a), (i+b, j-a),
+                   (i-b, j+a), (i-b, j-a)]
+        return ((x,y) for x,y in options
+                if 0 <= x < n and 0 <= y < m)
+    
+    def walk(a, b):
+        seen = set((0, 0))
+        q = [(0, 0)]
+        while q:
+            pos = q.pop()
+            for s in steps(*pos, a, b):
+                if s == finish:
+                    return True
+                if s not in seen:
+                    seen.add(s)
+                    q.append(s)
+        return False
+    
+    count = 0
+    for a in range(1, n):
+        for b in range(a, m):
+            count += walk(a, b)
+    return count
