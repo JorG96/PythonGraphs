@@ -18,6 +18,7 @@ solution(hangar) = 2.
 
 Ratiorg won't be able to get out of the hangar if he starts from either of the bottom rooms.
 """
+import numpy
 
 def solution(hangar):
     row = len(hangar)
