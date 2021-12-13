@@ -18,3 +18,37 @@ solution(hangar) = 2.
 
 Ratiorg won't be able to get out of the hangar if he starts from either of the bottom rooms.
 """
+
+def solution(hangar):
+    row = len(hangar)
+    col = len(hangar[0])
+    directions = {'U': (-1,0), 'L': (0,-1), 'R' : (0, 1), 'D': (1,0)}
+    reachable = numpy.full((row,col), -1)
+    def dfs(x,y):
+        stack = [[x,y]]
+        while stack:
+            x, y = stack.pop()
+            if not reachable[x,y]  : return 0
+            if reachable[x,y] == 1 : return 1
+            i,j = directions[hangar[x][y]]
+            if not (0 <= x + i < row and 0 <= y + j < col):
+                return 1 
+            else:
+                if (x + i, y + j) not in keep_track : 
+                    if 0 <= x + i < row and 0 <= y + j < col:
+                        stack.append((x + i, y + j))
+                        keep_track.add((x + i, y + j))
+                else:
+                    return 0
+        return 0
+    s = 0 
+    for i in range(row):
+        for j in range(col):
+            keep_track = {(i, j)}
+            k = dfs(i,j)
+            if not k : s += 1
+            for x,y in keep_track:
+                reachable[x,y] = k
+    return s
+                
+    
