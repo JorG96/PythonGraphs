@@ -31,3 +31,45 @@ There is a tree right at the entrance of the Training Camp, so there's no way to
 
 
 """
+import numpy as np
+
+
+def solution(forest):
+
+    if 0 in (forest[0][0], forest[-1][-1]):
+        return 0
+    forest = np.array(forest)
+    L, W = len(forest), len(forest[0])
+    m = min(L, W)
+    i, j = 1, 2
+    while i < m:  # find max size of tank in top left corner
+        if False in forest[i, :i + 1] or False in forest[:i, i]:
+            break
+        i += 1
+    while j < m:  # find max size of tank in bottom right corner
+        if False in forest[-j, -j:] or False in forest[-j:, -j]:
+            break
+        j += 1
+    size = min(i, (j - 1, j)[j == m])  # choose smaller size between above mentioned, or smaller dimension
+    while size:
+        visited = set()
+        pool = [((0, 0), (size - 1, size - 1))]
+        while pool:
+            (r1, c1), (r2, c2) = pool.pop()  # tank
+            if (r2, c2) == (L - 1, W - 1):  # bottom right corner of tank == bottom right corner of forest
+                return size
+            abs_i = r2 * W + c2
+            visited.add(abs_i)
+            if c1 and abs_i - 1 not in visited and False not in forest[r1: r2 + 1, c1 - 1]:  # move left
+                pool.append(((r1, c1 - 1), (r2, c2 - 1)))
+            if r1 and abs_i - W not in visited and False not in forest[r1 - 1, c1: c2 + 1]:  # move top
+                pool.append(((r1 - 1, c1), (r2 - 1, c2)))
+            if c2 < W - 1 and abs_i + 1 not in visited and False not in forest[r1:r2 + 1, c2 + 1]:  # move right
+                pool.append(((r1, c1 + 1), (r2, c2 + 1)))
+            if r2 < L - 1 and abs_i + W not in visited and False not in forest[r2 + 1, c1: c2 + 1]:  # move bottom
+                pool.append(((r1 + 1, c1), (r2 + 1, c2)))
+        size -= 1
+    return 0
+            
+        
+        
