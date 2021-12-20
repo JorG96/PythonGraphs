@@ -28,6 +28,8 @@ solution(maxTime, manacost) = 5.
 
 The best plan is to set solution into the top left and the bottom left corners (the total manacost equals 1 + 4 = 5). After that, you can reach the bottom left corner instantly and then make two moves rightwards in 2 seconds.
 """
+import numpy
+
 def solution(maxTime, manacost):
     row, col = len(manacost), len(manacost[0])
     from collections import defaultdict as ddict 
