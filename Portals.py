@@ -28,3 +28,32 @@ solution(maxTime, manacost) = 5.
 
 The best plan is to set solution into the top left and the bottom left corners (the total manacost equals 1 + 4 = 5). After that, you can reach the bottom left corner instantly and then make two moves rightwards in 2 seconds.
 """
+def solution(maxTime, manacost):
+    row, col = len(manacost), len(manacost[0])
+    from collections import defaultdict as ddict 
+    def dfs(x,y, head = 1):
+        dp = ddict(set)
+        seen = numpy.r_[manacost]
+        queue = [(x, y, 0)]
+        seen[x,y] = 1
+        while queue:
+            x, y, dis = queue.pop(0)
+            if dis <= maxTime:
+                if head and x == row - 1 and y == col - 1 :
+                    return 1
+                dp[dis].add(manacost[x][y])
+                for i,j in (0,1),(1,0),(-1,0),(0,-1):
+                    p, q = x + i, y + j
+                    if 0 <= p < row and 0 <= q < col and seen[p,q] != -1:
+                        seen[p,q] = -1
+                        queue.append((p, q, dis + 1))
+        return {x : min(y) for x,y in dp.items()}
+    start = dfs(0,0)
+    if start == 1 :
+        return 0
+    min_mana = float('inf')
+    end = dfs(row-1, col - 1, 0)
+    for step, mana in start.items():
+        leftTime = maxTime - step
+        min_mana = min( min_mana, min(y for x,y in end.items() if x <= leftTime ) + mana)
+    return min_mana
