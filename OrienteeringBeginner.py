@@ -18,3 +18,16 @@ roads = [[[1, 3]],
 the output should be
 solution(n, roads) = 8.
 """
+
+def solution(n, roads):
+    dist = [0] + [-1] * (n - 1)
+    to_check = [0]
+    while to_check:
+        l1 = to_check.pop(0)
+        d1 = dist[l1]
+        for l2, dd in roads[l1]:
+            d2, d2n = dist[l2], d1 + dd
+            if d2 == -1 or d2n < d2:
+                dist[l2] = d2n
+                to_check.append(l2)
+    return dist[-1]
