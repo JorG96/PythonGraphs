@@ -18,3 +18,21 @@ board = [[42, 51, 22, 10,  0 ],
 the output should be
 solution(board) = 140.
 """
+import heapq
+def solution(board):
+    Q = [(board[0][0],0,0)]
+    time = {(0,0):board[0][0]}
+    
+    end = (len(board)-1, len(board[0])-1)
+    while Q:
+        cur = heapq.heappop(Q)
+        x,y = (cur[1], cur[2])
+        D = cur[0]
+        
+        for nx, ny in [(x+1,y), (x-1, y), (x,y+1), (x, y-1)]:
+            if nx >= 0 and nx <= end[0] and ny >=0 and ny <= end[1]:
+                new_d = D + board[nx][ny]
+                if new_d < time.get((nx,ny), float('inf')):
+                    time[(nx,ny)] = new_d
+                    heapq.heappush(Q, (new_d, nx, ny))
+    return time[end] - board[end[0]][end[1]]
