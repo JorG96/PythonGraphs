@@ -26,3 +26,27 @@ solution(n, roads) = [[0, 1], [0, 2],
                                [2, 0], [2, 1], 
                                [6, 0], [6, 1], [6, 2]]
 """
+
+def solution(n, roads):
+    res = []
+    INF = float('inf')
+    g = [[INF] * n for i in range(n)]
+    for i in range(n):
+        for v, p in roads[i]:
+            g[i][v] = p
+    for k in range(n):
+        for i in range(n):
+            if g[i][k] != INF:
+                 for j in range(n):
+                        if g[k][j] != INF:
+                            g[i][j] = min(g[i][j], g[i][k] + g[k][j])         
+    finite = [i for i in range(n) if g[i][i] < 0]
+    for i in range(n):
+        for j in range(n):
+            if i != j and g[i][j] != float('inf'):
+                for k in finite:
+                    if g[i][k] != INF and g[k][j] != INF :
+                        break
+                else:
+                    res.append([i,j])
+    return res
