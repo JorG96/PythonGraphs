@@ -24,3 +24,28 @@ solution(n, roads) = [1, 0].
 
 Example
 """
+def solution(n, roads):
+    from collections import defaultdict 
+    from heapq import heappush as push, heappop as pop
+    g = defaultdict(dict)
+    for i in range(n):
+        for v, weight in roads[i]:
+            g[i][v] = weight 
+    def dijkstra(head):
+        queue = [[0, head]]
+        d = [float('inf')] * n
+        while queue:
+            dis, node = pop(queue)
+            if dis < d[node]:
+                d[node] = dis 
+                for v, weight in g[node].items():
+                    if dis + weight < d[v]:
+                        push(queue, (dis + weight, v))
+        return d
+    s = float('inf')
+    for i in range(n):
+        for v, dis in enumerate(dijkstra(i)):
+            if i != v and dis < s:
+                s, res = dis, (i,  v)
+    return res
+            
