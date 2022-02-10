@@ -7,4 +7,6 @@ Given the coordinates of start and finish located on the edges of a right start 
 
 The base of the pyramid is a regular octagram centered at (0, 0, 0) with two vertices on x axis and two vertices on y axis. The pyramid's apex is directly above (0, 0, 0) at the height h. Each pyramid's edge either belongs to the base or is connecting pyramid's apex with the base.
 It's guaranteed that both start and finish belong to the pyramid's edge.
+For h = 4, d = 2, start = [-1, 0, 2], and finish = [2, 0, 0], the output should be
+solution(h, d, start, finish) = 6.7082039325.
 """
