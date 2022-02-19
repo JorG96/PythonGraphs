@@ -16,6 +16,8 @@ solution(n, corridors) = 2.
 
 Corridors connecting rooms 0 and 1 or rooms 0 and 2 can be closed for repairing.
 """
+import sys
+
 def solution(n, corridors):
     sys.setrecursionlimit(10000000)
     from collections import defaultdict as ddict
