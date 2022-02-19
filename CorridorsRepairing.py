@@ -16,3 +16,30 @@ solution(n, corridors) = 2.
 
 Corridors connecting rooms 0 and 1 or rooms 0 and 2 can be closed for repairing.
 """
+def solution(n, corridors):
+    sys.setrecursionlimit(10000000)
+    from collections import defaultdict as ddict
+    g = ddict(dict)
+    for x,y,z in corridors:
+        g[x][y] = z 
+        g[y][x] = z
+    key = []
+    visited = [0] * n 
+    parent = [-1] * n
+    #simple dfs to find cycle
+    def dfs(node):
+        visited[node] = 1 
+        for v in g[node]:
+            if not visited[v]:
+                parent[v] = node
+                dfs(v)
+            else:
+                if parent[node] != v:
+                    key.append((node,v))         
+    dfs(0)
+    node, y = key[0]
+    curr = [g[node][y]]
+    while node != y:
+        curr.append(g[node][parent[node]])
+        node = parent[node]
+    return curr.count(min(curr)) 
