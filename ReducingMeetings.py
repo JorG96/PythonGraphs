@@ -14,3 +14,21 @@ solution(n, meetings) = 10.
 
 The best way to reduce meetings is to remove the 3rd (1-based) meeting from the list.
 """
+def solution(n, meetings):
+    from heapq import heappop as pop, heappush as push 
+    from collections import defaultdict as ddict
+    g = ddict(dict)
+    for x,y,z in meetings:
+        g[x][y] = g[y][x] = z 
+    visited = [0] * n 
+    queue = [(0,0)]
+    total = 0
+    while queue:
+        weight, node = pop(queue)
+        if not visited[node]:
+            visited[node] = 1 
+            total -= weight 
+            for v,w in g[node].items():
+                if not visited[v]:
+                    push(queue,(-w,v))
+    return total
